@@ -13,7 +13,7 @@ logging.basicConfig(
 
 
 
-class DataCleaner:
+class Dataself:
     def __init__(self, raw_dataset):
         self.raw_dataset = raw_dataset
         self.df = None
@@ -164,3 +164,34 @@ class DataCleaner:
             logging.error(f"Error in converting region values: {e}")
 
             
+    """
+    The is an issue with the postal code column where the values contain a period at the end.
+    This function strips them.
+    """
+    def strip_postal_code_period(self):
+        try:
+            # Convert postal code to int if it's a float (to remove '.0'), else leave as is
+            self.df['postal_code'] = self.df['postal_code'].apply(
+                lambda x: int(x) if isinstance(x, float) and not pd.isna(x) else x
+            )
+            logging.info("Stripped the period from the postal codes")
+        except Exception as e:
+            logging.error(f"Error in stripping the periods from the postal code values: {e}")
+
+
+
+    """
+    central function to run all the cleaner pipeline methods
+    """
+    def run(self):
+        self.read_raw_data()
+        self.normalise_columns()
+        self.check_states_column()
+        self.check_shipping_modes()
+        self.convert_date_columns()
+        self.check_country_column()
+        self.check_customer_name_id_integrity()
+        self.check_customer_segment_column()
+        self.check_region_column()
+        self.strip_postal_code_period()
+        return self
