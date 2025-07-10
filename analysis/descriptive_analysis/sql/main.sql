@@ -132,22 +132,25 @@ WITH TOP_CUSTOMERS AS (
     SELECT
         customer_id,
         customer_name,
-        state,
-        SUM(sales) AS Customer_Spending,
-        MIN(order_date) as first_order,
-        MAX(order_date) as last_order,
-        COUNT(order_id) as Order_Count
+        SUM(sales::numeric) AS Customer_Spending,
+        MIN(order_date) AS first_order,
+        MAX(order_date) AS last_order,
+        COUNT(DISTINCT order_id) AS Order_Count
     FROM ship_sales_data
-    GROUP BY customer_id, customer_name, state
+    GROUP BY customer_id, customer_name
 )
 SELECT
     customer_id,
     customer_name,
-    state,
     Customer_Spending,
     first_order,
     last_order,
-    Order_Count
+    Order_Count,
+    ROUND(Customer_Spending/Order_Count, 3) as avg_order_value
 FROM TOP_CUSTOMERS
 ORDER BY Customer_Spending DESC
 LIMIT 20;
+
+
+
+
