@@ -206,4 +206,4 @@ class DataCleaner:
         self.check_region_column()
         self.strip_postal_code_period()
         self.convert_date_types()
-        return self
+        return self.df
