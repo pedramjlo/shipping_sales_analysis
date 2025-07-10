@@ -17,7 +17,7 @@ class Pipeline:
         saver.save_cleaned_data(df=self.cleaned_data)
 
 
-    def load_to_db(self):
+    def load_to_database(self):
         db = Database()
         db.create_database() 
         db.load_to_db()
@@ -28,5 +28,5 @@ if __name__ == "__main__":
     pipe = Pipeline()
     pipe.clean_data()
     pipe.save_cleaned_data()
-    pipe.load_to_db()
+    pipe.load_to_database()
     
