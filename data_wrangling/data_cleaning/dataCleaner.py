@@ -100,6 +100,22 @@ class DataCleaner:
             logging.error(f"Error in converting date formats: {e}")
 
 
+    """
+    Checking if all country columns contain United States as the value
+    """
+    def check_country_column(self):
+        try:
+            # Check if any value in the "country" column is not "United States"
+            if not (self.df["country"] == "United States").all():
+                # Set non "United States" values to NaN
+                self.df["country"] = self.df["country"].apply(lambda x: x if x == "United States" else np.nan)
+                logging.info(f"Non-United States values converted to NaN")
+            else:
+                logging.info("All Country values are correct. No need for conversion.")
+        except Exception as e:
+            logging.error(f"Error in converting country values: {e}")
+
+
 
 
 
