@@ -132,7 +132,6 @@ class DataCleaner:
     """
     Checking if Segment column only contains the valid values
     """
-
     def check_customer_segment_column(self):
         segments = ["Consumer", "Corporate", "Home Office"]
         try:
@@ -147,3 +146,21 @@ class DataCleaner:
             logging.error(f"Error in converting segment values: {e}")
 
 
+
+    """
+    are all region column values valid?
+    """
+    def check_region_column(self):
+        regions = ["South", "West", "Central", "East"]
+        try:
+            # Check if all values are valid segments
+            if not (self.df["region"].isin(regions)).all():
+                # Set invalid values to NaN
+                self.df["region"] = self.df["region"].apply(lambda x: np.nan if x not in regions else x)
+                logging.info(f"Invalid values converted to NaN")
+            else:
+                logging.info("All region values are correct. No need for conversion.")
+        except Exception as e:
+            logging.error(f"Error in converting region values: {e}")
+
+            
