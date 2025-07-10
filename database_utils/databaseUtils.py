@@ -31,7 +31,7 @@ load_dotenv()
 
 
 class Database:
-    def __init__(self, file_path=os.path.join(PROJECT_ROOT, "dataset", "cleaned", "cleaned_uae_cars.csv")):
+    def __init__(self, file_path=os.path.join(PROJECT_ROOT, "dataset", "cleaned_data", "cleaned_sales_data.csv")):
         self.user = os.getenv('DB_USER')
         self.password = quote_plus(os.getenv('DB_PASSWORD'))
         self.host = os.getenv('DB_HOST')
@@ -75,7 +75,7 @@ class Database:
 
 
 
-    def load_to_db(self, table_name="uae_cars_analysis", if_exists='replace'):
+    def load_to_db(self, table_name="ship_sales_data", if_exists='replace'):
         engine = self.create_engine()
         try:
             self.target_dataset.to_sql(table_name, engine, index=False, if_exists=if_exists)

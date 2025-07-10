@@ -1,6 +1,6 @@
 from data_wrangling.data_cleaning.dataCleaner import DataCleaner
 from data_saving.dataSaver import DataSaver
-
+from database_utils.databaseUtils import Database
 
 
 class Pipeline:
@@ -17,9 +17,16 @@ class Pipeline:
         saver.save_cleaned_data(df=self.cleaned_data)
 
 
+    def load_to_db(self):
+        db = Database()
+        db.create_database() 
+        db.load_to_db()
+
+
 
 if __name__ == "__main__":
     pipe = Pipeline()
     pipe.clean_data()
     pipe.save_cleaned_data()
+    pipe.load_to_db()
     
