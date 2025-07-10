@@ -81,19 +81,20 @@ class DataCleaner:
     """
     Converting the Americanised date format (dd/mm/yyyy) to ISO (yyyy-mm-dd)
     """
-    def convert_date_columns(self, date_column):
+    def convert_date_columns(self, date_columns=["order_date", "ship_date"]):
         try:
-            # Convert date to datetime format (with error handling)
-            self.df[date_column] = pd.to_datetime(self.df[date_column], format='%d/%m/%Y', errors='coerce')
+            for date_column in date_columns:
+                # Convert date to datetime format (with error handling)
+                self.df[date_column] = pd.to_datetime(self.df[date_column], format='%d/%m/%Y', errors='coerce')
 
-            # Check if conversion was successful
-            if self.df[date_column].isnull().any():
-                logging.warning(f"Some entries in {date_column} could not be converted and are now NaT.")
+                # Check if conversion was successful
+                if self.df[date_column].isnull().any():
+                    logging.warning(f"Some entries in {date_column} could not be converted and are now NaT.")
 
-            # Optionally, standardize the format to 'YYYY-MM-DD'
-            self.df[date_column] = self.df[date_column].dt.strftime('%Y-%m-%d')
+                # Optionally, standardize the format to 'YYYY-MM-DD'
+                self.df[date_column] = self.df[date_column].dt.strftime('%Y-%m-%d')
 
-            logging.info(f"{date_column} values successfully converted to yyyy-mm-dd format.")
+                logging.info(f"{date_column} values successfully converted to yyyy-mm-dd format.")
 
         except Exception as e:
             logging.error(f"Error in converting date formats: {e}")
