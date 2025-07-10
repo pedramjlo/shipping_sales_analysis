@@ -15,3 +15,4 @@ if __name__ == "__main__":
     cleaner.normalise_columns()
     cleaner.check_states_column()
     cleaner.check_shipping_modes()
+    cleaner.convert_date_columns("order_id")
