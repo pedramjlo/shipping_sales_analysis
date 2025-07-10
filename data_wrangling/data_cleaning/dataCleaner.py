@@ -190,6 +190,23 @@ class DataCleaner:
         except Exception as e:
             logging.warning(f"Failed to convert {date_column} to datetime type: {e}")
 
+    """
+    dropping duplicate rows
+    """
+    def drop_duplicate_rows(self):
+        total_rows = self.df.shape[0]
+        duplicate_rows = self.df.duplicated().sum()
+        
+        try:
+            if duplicate_rows == 0:
+                logging.info("No duplicate rows were found")
+            else:
+                self.df = self.df.drop_duplicates()
+                removed_rows = total_rows - self.df.shape[0]
+                logging.info(f"{removed_rows} rows were removed")
+        except Exception as e:
+            logging.error(f"Failed to drop duplicate rows, {e}")
+
 
     """
     central function to run all the cleaner pipeline methods
@@ -206,4 +223,5 @@ class DataCleaner:
         self.check_region_column()
         self.strip_postal_code_period()
         self.convert_date_types()
+        self.drop_duplicate_rows()
         return self.df
