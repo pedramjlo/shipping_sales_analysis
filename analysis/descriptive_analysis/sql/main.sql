@@ -67,3 +67,34 @@ SELECT
 FROM RANKED_CATEGORY
 WHERE rn = 1
 ORDER BY category_revenue DESC;
+
+
+
+-- AVERAGE SHIPPING TIME PER CATEGORY
+WITH AVERAGE_SHIPPING_DAYS AS (
+    SELECT
+        category,
+        ROUND(AVG((ship_date::date) - (order_date::date)), 1) as average_ship_days
+    FROM ship_sales_data
+    GROUP BY category
+)
+SELECT
+    category,
+    average_ship_days
+FROM AVERAGE_SHIPPING_DAYS
+ORDER BY average_ship_days ASC;
+
+
+-- AVERAGE SHIPPING TIME PER SUB-CATEGORY
+WITH AVERAGE_SHIPPING_DAYS AS (
+    SELECT
+        sub_category,
+        ROUND(AVG((ship_date::date) - (order_date::date)), 1) as average_ship_days
+    FROM ship_sales_data
+    GROUP BY sub_category
+)
+SELECT
+    sub_category,
+    average_ship_days
+FROM AVERAGE_SHIPPING_DAYS
+ORDER BY average_ship_days ASC;
