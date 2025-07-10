@@ -1,5 +1,9 @@
 import pandas as pd
-import logging
+from logging.logger import Logger
+
+
+log = Logger().get_logger()
+
 
 class DataCleaner:
     def __init__(self, raw_dataset):
@@ -10,10 +14,10 @@ class DataCleaner:
     def read_raw_data(self):
         try:
             self.df = pd.read_csv(self.raw_data, encoding="ISO-8859-1", engine='python')
-            logging.info("Read the dataset successfully.")
+            log.info("Read the dataset successfully.")
         except FileNotFoundError:
-            logging.error("Error: The file was not found.")
+            log.error("Error: The file was not found.")
         except pd.errors.EmptyDataError:
-            logging.error("Error: The file is empty.")
+            log.error("Error: The file is empty.")
         except pd.errors.ParserError:
-            logging.error("Error: The file could not be parsed.")
+            log.error("Error: The file could not be parsed.")
