@@ -70,6 +70,32 @@ ORDER BY category_revenue DESC;
 
 
 
+-- TOP-SELLING SUB-CATEGORIES BY STATE
+WITH TOP_SUB_CATEGORY AS (
+    SELECT
+        state,
+        sub_category,
+        SUM(sales) AS Revenue
+    FROM ship_sales_data
+    GROUP BY state, sub_category
+),
+RANKED_SUB_CATEGORY AS (
+    SELECT
+        state,
+        sub_category,
+        Revenue,
+        ROW_NUMBER() OVER (PARTITION BY state ORDER BY Revenue DESC) AS rn
+    FROM TOP_SUB_CATEGORY
+)
+SELECT
+    state,
+    sub_category,
+    Revenue AS category_revenue
+FROM RANKED_SUB_CATEGORY
+WHERE rn = 1
+ORDER BY category_revenue DESC;
+
+
 -- AVERAGE SHIPPING TIME PER CATEGORY
 WITH AVERAGE_SHIPPING_DAYS AS (
     SELECT
@@ -85,6 +111,7 @@ FROM AVERAGE_SHIPPING_DAYS
 ORDER BY average_ship_days ASC;
 
 
+
 -- AVERAGE SHIPPING TIME PER SUB-CATEGORY
 WITH AVERAGE_SHIPPING_DAYS AS (
     SELECT
@@ -98,3 +125,29 @@ SELECT
     average_ship_days
 FROM AVERAGE_SHIPPING_DAYS
 ORDER BY average_ship_days ASC;
+
+
+-- TOP CUSTOMERS OVERALL 
+WITH TOP_CUSTOMERS AS (
+    SELECT
+        customer_id,
+        customer_name,
+        state,
+        SUM(sales) AS Customer_Spending,
+        MIN(order_date) as first_order,
+        MAX(order_date) as last_order,
+        COUNT(order_id) as Order_Count
+    FROM ship_sales_data
+    GROUP BY customer_id, customer_name, state
+)
+SELECT
+    customer_id,
+    customer_name,
+    state,
+    Customer_Spending,
+    first_order,
+    last_order,
+    Order_Count
+FROM TOP_CUSTOMERS
+ORDER BY Customer_Spending DESC
+LIMIT 20;
