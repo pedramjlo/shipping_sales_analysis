@@ -105,9 +105,8 @@ class DataCleaner:
     """
     def check_country_column(self):
         try:
-            # Check if any value in the "country" column is not "United States"
             if not (self.df["country"] == "United States").all():
-                # Set non "United States" values to NaN
+                # set non "United States" values to NaN
                 self.df["country"] = self.df["country"].apply(lambda x: x if x == "United States" else np.nan)
                 logging.info(f"Non-United States values converted to NaN")
             else:
@@ -115,6 +114,19 @@ class DataCleaner:
         except Exception as e:
             logging.error(f"Error in converting country values: {e}")
 
+
+    """
+    Checking for the integrity of customers' names and their ID
+    """
+    def check_customer_name_id_integrity(self):
+        try:
+            inconsistent_rows = self.df[self.df.duplicated(subset=['customer_id'], keep=False) & 
+                (self.df['customer_name'] != self.df.groupby('customer_id')['customer_name'].transform('first'))]
+            if not inconsistent_rows.empty:
+                logging.warning(f"Inconsistent Customer id-name found: {inconsistent_rows}")
+            logging.info("No incosistent id-name columns were found.")
+        except Exception as e:
+            logging.error(f"Inconsistency in customer name-id columns: {e}")
 
 
 

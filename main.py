@@ -17,3 +17,4 @@ if __name__ == "__main__":
     cleaner.check_shipping_modes()
     cleaner.convert_date_columns()
     cleaner.check_country_column()
+    cleaner.check_customer_name_id_integrity()
