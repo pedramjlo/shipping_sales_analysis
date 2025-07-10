@@ -129,5 +129,21 @@ class DataCleaner:
             logging.error(f"Inconsistency in customer name-id columns: {e}")
 
 
+    """
+    Checking if Segment column only contains the valid values
+    """
+
+    def check_customer_segment_column(self):
+        segments = ["Consumer", "Corporate", "Home Office"]
+        try:
+            # Check if all values are valid segments
+            if not (self.df["segment"].isin(segments)).all():
+                # Set invalid values to NaN
+                self.df["segment"] = self.df["segment"].apply(lambda x: np.nan if x not in segments else x)
+                logging.info(f"Invalid values converted to NaN")
+            else:
+                logging.info("All segment values are correct. No need for conversion.")
+        except Exception as e:
+            logging.error(f"Error in converting segment values: {e}")
 
 
