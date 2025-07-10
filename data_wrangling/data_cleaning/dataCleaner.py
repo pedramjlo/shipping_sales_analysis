@@ -29,6 +29,10 @@ class DataCleaner:
             logging.error("Error: The file could not be parsed.")
 
 
+
+    """
+    Due to columns inconsistent naming, the column names are standardised by adding an underscore and converting to lower cases
+    """
     def normalise_columns(self):
         try:
             split_chars = ["-", " "]
@@ -38,3 +42,5 @@ class DataCleaner:
             logging.info(f"Normalised data columns successfully. {self.df.columns}")
         except Exception as e:
             logging.error(f"Error at normalising column names, {e}")
+
+
