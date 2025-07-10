@@ -57,12 +57,25 @@ class DataCleaner:
                 if not state in us_states:
                     self.df["state"] = np.nan
                     logging.info(f"State {state} wasn't in the list. replace with NaN")
-            logging.info("States checked successfully")
+            logging.info("States checked successfully. All values are correct.")
         except Exception as e:
             logging.error(f"error in checking states names, {e}")
 
 
-    def 
+    """
+    Checking whether the only available shipping modes are listed
+    """
+    def check_shipping_modes(self):
+        shipping_methods = ["Second Class", "Standard Class", "First Class", "Same Day"]
+        try:
+            for mode in self.df["ship_mode"]:
+                if not mode in shipping_methods:
+                    self.df["ship_mode"] = np.nan
+                    logging.info(f"Shipping modes {mode} wasn't in the list. replace with NaN")
+            logging.info("Shipping modes checked successfully. All values are correct.")
+        except Exception as e:
+            logging.error(f"error in checking shipping modes, {e}")
+
 
 
 
