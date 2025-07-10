@@ -1,8 +1,14 @@
 import pandas as pd
-from logging.logger import Logger
+import logging
+import re
 
 
-log = Logger().get_logger()
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+)
+
+
 
 
 class DataCleaner:
@@ -13,11 +19,22 @@ class DataCleaner:
 
     def read_raw_data(self):
         try:
-            self.df = pd.read_csv(self.raw_data, encoding="ISO-8859-1", engine='python')
-            log.info("Read the dataset successfully.")
+            self.df = pd.read_csv(self.raw_dataset, encoding="ISO-8859-1", engine='python')
+            logging.info("Read the dataset successfully.")
         except FileNotFoundError:
-            log.error("Error: The file was not found.")
+            logging.error("Error: The file was not found.")
         except pd.errors.EmptyDataError:
-            log.error("Error: The file is empty.")
+            logging.error("Error: The file is empty.")
         except pd.errors.ParserError:
-            log.error("Error: The file could not be parsed.")
+            logging.error("Error: The file could not be parsed.")
+
+
+    def normalise_columns(self):
+        try:
+            split_chars = ["-", " "]
+            split_pattern = f"[{re.escape(''.join(split_chars))}]"
+            self.df.columns = ["_".join(re.split(f"[{re.escape(split_pattern)}]", col.lower())) for col in self.df.columns]
+
+            logging.info(f"Normalised data columns successfully. {self.df.columns}")
+        except Exception as e:
+            logging.error(f"Error at normalising column names, {e}")
