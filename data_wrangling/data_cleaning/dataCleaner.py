@@ -13,7 +13,7 @@ logging.basicConfig(
 
 
 
-class Dataself:
+class DataCleaner:
     def __init__(self, raw_dataset):
         self.raw_dataset = raw_dataset
         self.df = None
@@ -179,6 +179,17 @@ class Dataself:
             logging.error(f"Error in stripping the periods from the postal code values: {e}")
 
 
+    """
+    converting 2 date columns, order date & ship date from pandas objects to date types
+    """
+    def convert_date_types(self, date_columns=["order_date", "ship_date"]):
+        try:
+            for date_column in date_columns:
+                self.df[date_column] = pd.to_datetime(self.df[date_column], errors='coerce')
+                logging.info(f"Successfully converted {date_column} to datetime.")
+        except Exception as e:
+            logging.warning(f"Failed to convert {date_column} to datetime type: {e}")
+
 
     """
     central function to run all the cleaner pipeline methods
@@ -194,4 +205,5 @@ class Dataself:
         self.check_customer_segment_column()
         self.check_region_column()
         self.strip_postal_code_period()
+        self.convert_date_types()
         return self
