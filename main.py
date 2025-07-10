@@ -13,3 +13,4 @@ if __name__ == "__main__":
     cleaner = DataCleaner(raw_dataset=raw_dataset)
     cleaner.read_raw_data()
     cleaner.normalise_columns()
+    cleaner.check_states_column()

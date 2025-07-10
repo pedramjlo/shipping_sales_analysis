@@ -1,6 +1,8 @@
 import pandas as pd
+import numpy as np
 import logging
 import re
+
 
 
 logging.basicConfig(
@@ -42,5 +44,19 @@ class DataCleaner:
             logging.info(f"Normalised data columns successfully. {self.df.columns}")
         except Exception as e:
             logging.error(f"Error at normalising column names, {e}")
+
+
+
+    """
+    Checking the states columns to verify the values of states column
+    """
+    def check_states_column(self):
+        us_states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+        for state in self.df["state"]:
+            if not state in us_states:
+                self.df["state"] = np.nan
+                logging.info(f"State {state} wasn't in the list. replace with NaN")
+        logging.info("States checked successfully")
+
 
 
