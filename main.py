@@ -1,7 +1,7 @@
 from data_wrangling.data_cleaning.dataCleaner import DataCleaner
 from data_saving.dataSaver import DataSaver
 from database_utils.databaseUtils import Database
-from analysis.descriptive_analysis.association_analysis.associationAnalysis import CreateDataset
+from analysis.descriptive_analysis.association_analysis.associationAnalysis import MarketBasketAnalysis
 
 
 class Pipeline:
@@ -33,23 +33,42 @@ class Pipeline:
         db.create_database() 
         db.load_to_db()
 
+    
+
+
+
+class AssociationAnalysis:
+    def __init__(self, df="./dataset/cleaned_data/cleaned_sales_data.csv"):
+        self.cls_obj = MarketBasketAnalysis(df=df)
+
+
     """
     creating a dataset for market basket analysis
     """
     def create_mba_data(self):
-        cd = CreateDataset(df=self.cleaned_data)
-        cd.create_mba_dataset()
+        self.cls_obj.create_mba_dataset()
+
+
+    def find_frequency(self):
+        self.cls_obj.find_frequency(new_dataset="./dataset/transactions/transactions.csv")
+
+    
+    
 
 
 
 if __name__ == "__main__":
+    """
     pipe = Pipeline()
     pipe.clean_data()
     pipe.save_cleaned_data()
     pipe.load_to_database()
+    """
     
     
-    pipe.create_mba_data()
+    association = AssociationAnalysis()
+    association.create_mba_data()
+    print(association.find_frequency())
 
     
     
