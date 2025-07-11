@@ -5,7 +5,7 @@ SELECT * FROM ship_sales_data;
 -- TOTAL SALES BY STATES
 SELECT 
     state,
-    SUM(sales) as Revenue
+    ROUND(SUM(sales::int), 3) as Revenue
 FROM ship_sales_data
 GROUP BY state
 ORDER BY Revenue DESC;
