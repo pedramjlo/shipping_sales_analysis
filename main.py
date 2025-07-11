@@ -47,6 +47,8 @@ if __name__ == "__main__":
     pipe.clean_data()
     pipe.save_cleaned_data()
     pipe.load_to_database()
+    
+    
     pipe.create_mba_data()
 
     

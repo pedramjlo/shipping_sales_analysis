@@ -29,6 +29,11 @@ class CreateDataset:
 
             # Create a new DataFrame for one-hot encoding
             one_hot_data = pd.DataFrame(0, index=transaction_data.index, columns=unique_products)
+
+            # Loop through each transaction and mark the products bought
+            for idx, transaction in transaction_data.iterrows():
+                for product in transaction['product_name']:
+                    one_hot_data.at[idx, product] = 1
             
             logging.info("Created a dataset for market basket analysis successfully")
 
