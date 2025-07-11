@@ -240,3 +240,17 @@ GROUP BY Year, season
 ORDER BY Year, season;
 
 
+
+-- AVERAGE ORDER VALUE BY SHIP MODE
+WITH AVERAGE_VALUE AS (
+    SELECT
+        ship_mode,
+        SUM(sales) / count(DISTINCT order_id) as order_value
+    FROM ship_sales_data
+    GROUP BY ship_mode
+)
+SELECT
+    ship_mode,
+    order_value
+FROM AVERAGE_VALUE
+ORDER BY order_value DESC;
