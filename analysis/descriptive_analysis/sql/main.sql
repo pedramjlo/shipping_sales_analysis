@@ -60,7 +60,7 @@ WITH TOP_CATEGORY AS (
     SELECT
         state,
         category,
-        SUM(sales) AS Revenue
+        ROUND(SUM(sales::int), 3) AS Revenue
     FROM ship_sales_data
     GROUP BY state, category
 ),
@@ -86,14 +86,16 @@ ORDER BY category_revenue DESC;
 WITH TOP_SUB_CATEGORY AS (
     SELECT
         state,
+        category,
         sub_category,
         SUM(sales) AS Revenue
     FROM ship_sales_data
-    GROUP BY state, sub_category
+    GROUP BY state, category, sub_category
 ),
 RANKED_SUB_CATEGORY AS (
     SELECT
         state,
+        category,
         sub_category,
         Revenue,
         ROW_NUMBER() OVER (PARTITION BY state ORDER BY Revenue DESC) AS rn
@@ -101,6 +103,7 @@ RANKED_SUB_CATEGORY AS (
 )
 SELECT
     state,
+    category,
     sub_category,
     Revenue AS category_revenue
 FROM RANKED_SUB_CATEGORY
@@ -121,6 +124,36 @@ SELECT
     average_ship_days
 FROM AVERAGE_SHIPPING_DAYS
 ORDER BY average_ship_days ASC;
+
+
+-- MOST COMMON SHIP MODE CHOICE PER SUB-CATEGORY
+WITH SHIPPING_CHOICE AS (
+    SELECT
+        ship_mode,
+        category, 
+        sub_category,
+        count(ship_mode) as shipping_choice_count
+    FROM ship_sales_data
+    GROUP BY ship_mode, category, sub_category
+),
+RANKED_SHIPPING AS (
+    SELECT
+        ship_mode,
+        category,
+        sub_category,
+        shipping_choice_count,
+        ROW_NUMBER() OVER (PARTITION BY sub_category ORDER BY shipping_choice_count DESC) AS rn
+    FROM SHIPPING_CHOICE
+)
+SELECT
+    ship_mode,
+    category,
+    sub_category,
+    shipping_choice_count
+FROM RANKED_SHIPPING
+WHERE rn = 1
+ORDER BY category;
+
 
 
 
