@@ -11,6 +11,15 @@ GROUP BY state
 ORDER BY Revenue DESC;
 
 
+-- AVERAGE SALES BY STATES
+SELECT 
+    state,
+    ROUND(AVG(sales::int), 3) as Revenue
+FROM ship_sales_data
+GROUP BY state
+ORDER BY state;
+
+
 -- TOTAL REVENUE BY CITY WITHIN STATES
 WITH SALES_PER_CITY AS (
     SELECT
@@ -26,6 +35,9 @@ SELECT
     Revenue
 FROM SALES_PER_CITY
 ORDER BY state, Revenue DESC;
+
+
+
 
 
 -- AVERAGE SHIPPING TIME (DAYS) AFTER THE SUBMISSION OF THE ORDER PER STATE
@@ -193,3 +205,5 @@ SELECT
 FROM SEASON_TABLE
 GROUP BY Year, season
 ORDER BY Year, season;
+
+
