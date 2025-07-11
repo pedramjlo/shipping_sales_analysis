@@ -153,4 +153,43 @@ LIMIT 20;
 
 
 
+-- AVERAGE SHIPPING TIME PER SHIPPING MODE
+SELECT 
+    ship_mode,
+    ROUND(AVG((ship_date::date) - (order_date::date)), 2) as average_ship_days
+FROM ship_sales_data
+GROUP BY ship_mode
+ORDER BY average_ship_days ASC;
 
+
+
+-- SALES BY SEASONALITY
+WITH SALES_BY_SEASON AS (
+    SELECT
+        EXTRACT(YEAR FROM order_date::date) as Year,
+        EXTRACT(MONTH FROM order_date::date) as Month,
+        sales
+    FROM ship_sales_data
+    GROUP BY Year, Month, sales
+),
+SEASON_TABLE AS (
+    SELECT
+        Year,
+        Month,
+        sales,
+        CASE
+            WHEN Month IN (12, 1, 2) THEN 'Winter'
+            WHEN Month IN (3, 4, 5) THEN 'Spring'
+            WHEN Month IN (6, 7, 8) THEN 'Summer'
+            WHEN Month IN (9, 10, 11) THEN 'Autumn'
+            ELSE 'Unknown'
+        END AS season
+    FROM SALES_BY_SEASON
+)
+SELECT
+    Year,
+    season,
+    ROUND(AVG(sales::int) , 3) as average_sales
+FROM SEASON_TABLE
+GROUP BY Year, season
+ORDER BY Year, season;
