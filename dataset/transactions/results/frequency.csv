@@ -1,13 +1,8 @@
 support,itemsets
-0.2622917513206014,frozenset({'Binders'})
-0.23628606257618853,frozenset({'Paper'})
-0.17370987403494514,frozenset({'Furnishings'})
-0.16314506298252743,frozenset({'Phones'})
-0.15522145469321413,frozenset({'Storage'})
-0.14628199918732224,frozenset({'Art'})
-0.14262494920763918,frozenset({'Accessories'})
-0.11499390491670053,frozenset({'Chairs'})
-0.09020723283218204,frozenset({'Appliances'})
-0.06907761072734661,frozenset({'Labels'})
-0.061357171881349044,frozenset({'Tables'})
-0.05424624136529866,"frozenset({'Paper', 'Binders'})"
+0.7468508736286062,frozenset({'Office Supplies'})
+0.3508736286062576,frozenset({'Furniture'})
+0.3086143843965867,frozenset({'Technology'})
+0.19179195449004469,"frozenset({'Office Supplies', 'Furniture'})"
+0.1830556684274685,"frozenset({'Technology', 'Office Supplies'})"
+0.09609914668833808,"frozenset({'Technology', 'Furniture'})"
+0.06460788297440065,"frozenset({'Technology', 'Office Supplies', 'Furniture'})"

@@ -39,13 +39,13 @@ class Pipeline:
 
 class AssociationAnalysis:
     def __init__(self, df="./dataset/cleaned_data/cleaned_sales_data.csv"):
-        self.cls_obj = MarketBasketAnalysis(df=df)
+        self.cls_obj = MarketBasketAnalysis(df=df, mba_on="category")
 
 
 
     def perform_mba(self):
         self.cls_obj.create_mba_dataset()
-        frequent_itemsets = self.cls_obj.find_frequency(new_dataset="./dataset/transactions/transactions.csv")
+        frequent_itemsets = self.cls_obj.find_frequency(new_dataset="./dataset/transactions/transactions-category.csv")
         print(self.cls_obj.generate_association_rules(frequent_itemsets))
 
 
@@ -55,12 +55,11 @@ if __name__ == "__main__":
     """
     Data cleaning, saving, and loading to the database
     """
-    """
     pipe = Pipeline()
     pipe.clean_data()
     pipe.save_cleaned_data()
     pipe.load_to_database()
-    """
+
 
     """
     Market Basket Analysis

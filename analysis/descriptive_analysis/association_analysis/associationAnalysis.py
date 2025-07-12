@@ -17,23 +17,25 @@ saver = DataSaver()
 
 
 class MarketBasketAnalysis:
-    def __init__(self, df):
+    def __init__(self, df, mba_on=None):
         self.df = df
+        self.mba_on = mba_on
+
 
 
     def create_mba_dataset(self):
         self.df = pd.read_csv(self.df)
         try:
             # Group by invoice_id to get a list of products per transaction
-            transaction_data = self.df.groupby('order_id')['sub_category'].apply(list).reset_index()
-            unique_products = self.df['sub_category'].unique()
+            transaction_data = self.df.groupby('order_id')[self.mba_on].apply(list).reset_index()
+            unique_products = self.df[self.mba_on].unique()
 
             # Create a new DataFrame for one-hot encoding
             one_hot_data = pd.DataFrame(0, index=transaction_data.index, columns=unique_products)
 
             # Loop through each transaction and mark the products bought
             for idx, transaction in transaction_data.iterrows():
-                for product in transaction['sub_category']:
+                for product in transaction[self.mba_on]:
                     one_hot_data.at[idx, product] = 1
 
 
@@ -43,7 +45,7 @@ class MarketBasketAnalysis:
             
 
             # SAVING THE NEW DATAFRAME
-            saver.save_cleaned_data(df=one_hot_data, output_dir="dataset/transactions", filename="transactions.csv")
+            saver.save_cleaned_data(df=one_hot_data, output_dir="dataset/transactions", filename="transactions-category.csv")
 
             
             logging.info("Created a dataset for market basket analysis successfully")
