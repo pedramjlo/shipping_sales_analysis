@@ -172,29 +172,31 @@ FROM AVERAGE_SHIPPING_DAYS
 ORDER BY average_ship_days ASC;
 
 
--- TOP CUSTOMERS OVERALL 
+-- TOP-SPENDING CUSTOMERS OVERALL + ORDER COUNT + AVERAGE ORDER VALUE
 WITH TOP_CUSTOMERS AS (
     SELECT
         customer_id,
         customer_name,
-        SUM(sales::numeric) AS Customer_Spending,
+        SUM(sales::numeric) AS customer_spending,
         MIN(order_date) AS first_order,
         MAX(order_date) AS last_order,
-        COUNT(DISTINCT order_id) AS Order_Count
+        COUNT(DISTINCT order_id) AS order_count
     FROM ship_sales_data
     GROUP BY customer_id, customer_name
 )
 SELECT
     customer_id,
     customer_name,
-    Customer_Spending,
+    customer_spending,
     first_order,
     last_order,
-    Order_Count,
-    ROUND(Customer_Spending/Order_Count, 3) as avg_order_value
+    order_count,
+    ROUND(customer_spending/order_count, 3) as avg_order_value
 FROM TOP_CUSTOMERS
-ORDER BY Customer_Spending DESC
+ORDER BY customer_spending DESC
 LIMIT 20;
+
+
 
 
 
