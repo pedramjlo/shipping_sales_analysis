@@ -42,33 +42,30 @@ class AssociationAnalysis:
         self.cls_obj = MarketBasketAnalysis(df=df)
 
 
-    """
-    creating a dataset for market basket analysis
-    """
-    def create_mba_data(self):
+
+    def perform_mba(self):
         self.cls_obj.create_mba_dataset()
-
-
-    def find_frequency(self):
-        self.cls_obj.find_frequency(new_dataset="./dataset/transactions/transactions.csv")
-
-    
-    
+        frequent_itemsets = self.cls_obj.find_frequency(new_dataset="./dataset/transactions/transactions.csv")
+        print(self.cls_obj.generate_association_rules(frequent_itemsets))
 
 
 
 if __name__ == "__main__":
+
+    """
+    Data cleaning, saving, and loading to the database
+    """
     """
     pipe = Pipeline()
     pipe.clean_data()
     pipe.save_cleaned_data()
     pipe.load_to_database()
     """
-    
-    
-    association = AssociationAnalysis()
-    association.create_mba_data()
-    print(association.find_frequency())
 
-    
+    """
+    Market Basket Analysis
+    """
+    mba = AssociationAnalysis()
+    mba.perform_mba()
+
     
