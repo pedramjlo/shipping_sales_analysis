@@ -147,24 +147,24 @@ ORDER BY average_ship_days ASC;
 -- MOST COMMON SHIP MODE CHOICE PER SUB-CATEGORY
 WITH SHIPPING_CHOICE AS (
     SELECT
-        ship_mode,
         category, 
         sub_category,
+        ship_mode as popular_ship_mode,
         count(ship_mode) as shipping_choice_count
     FROM ship_sales_data
-    GROUP BY ship_mode, category, sub_category
+    GROUP BY popular_ship_mode, category, sub_category
 ),
 RANKED_SHIPPING AS (
     SELECT
-        ship_mode,
         category,
         sub_category,
+        popular_ship_mode,
         shipping_choice_count,
         ROW_NUMBER() OVER (PARTITION BY sub_category ORDER BY shipping_choice_count DESC) AS rn
     FROM SHIPPING_CHOICE
 )
 SELECT
-    ship_mode,
+    popular_ship_mode,
     category,
     sub_category,
     shipping_choice_count
@@ -233,15 +233,15 @@ WITH SALES_BY_SEASON AS (
     SELECT
         EXTRACT(YEAR FROM order_date::date) as Year,
         EXTRACT(MONTH FROM order_date::date) as Month,
-        sales
+        SUM(sales) AS monthly_sales
     FROM ship_sales_data
-    GROUP BY Year, Month, sales
+    GROUP BY Year, Month
 ),
 SEASON_TABLE AS (
     SELECT
         Year,
         Month,
-        sales,
+        monthly_sales,
         CASE
             WHEN Month IN (12, 1, 2) THEN 'Winter'
             WHEN Month IN (3, 4, 5) THEN 'Spring'
@@ -254,10 +254,18 @@ SEASON_TABLE AS (
 SELECT
     Year,
     season,
-    ROUND(AVG(sales::int) , 3) as average_sales
+    ROUND(AVG(monthly_sales::int), 3) as average_sales
 FROM SEASON_TABLE
 GROUP BY Year, season
-ORDER BY Year, season;
+ORDER BY Year,
+    CASE season
+        WHEN 'Winter' THEN 1
+        WHEN 'Spring' THEN 2
+        WHEN 'Summer' THEN 3
+        WHEN 'Autumn' THEN 4
+        ELSE 5
+    END;
+
 
 
 
