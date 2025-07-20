@@ -2,6 +2,7 @@ from data_wrangling.data_cleaning.dataCleaner import DataCleaner
 from data_saving.dataSaver import DataSaver
 from database_utils.databaseUtils import Database
 from analysis.descriptive_analysis.association_analysis.associationAnalysis import MarketBasketAnalysis
+from analysis.descriptive_analysis.clustering_analysis.kMeansClustering import KMeans
 
 
 class Pipeline:
@@ -50,6 +51,16 @@ class AssociationAnalysis:
 
 
 
+class ClusteringAnalysis:
+    def __init__(self, df="./dataset/cleaned_data/cleaned_sales_data.csv"):
+        self.df = df
+        self.cls_obj = KMeans(data=self.df)
+
+
+    def perform_kmean(self):
+        self.cls_obj.fit_transform()
+
+
 if __name__ == "__main__":
 
     """
@@ -63,8 +74,10 @@ if __name__ == "__main__":
 
     """
     Market Basket Analysis
-    """
     mba = AssociationAnalysis()
     mba.perform_mba()
-
+    """
+    
+    cls = ClusteringAnalysis()
+    cls.perform_kmean()
     

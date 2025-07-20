@@ -55,6 +55,24 @@ FROM AVERAGE_SHIP_TIME
 ORDER BY average_ship_days DESC;
 
 
+-- AVERAGE SHIPPING TIME (DAYS) AFTER THE SUBMISSION OF THE ORDER PER STATE PER SEASON
+WITH AVERAGE_SHIP_TIME AS (
+    SELECT
+        state,
+        EXTRACT(YEAR FROM order_date::date) as Year,
+        EXTRACT(MONTH FROM order_date::date) as Month,
+        ROUND(AVG((ship_date::date) - (order_date::date)), 1) as average_ship_days
+    FROM ship_sales_data
+    GROUP BY state, Year, Month
+) 
+SELECT
+    state,
+    Month,
+    average_ship_days
+FROM AVERAGE_SHIP_TIME
+ORDER BY Month, average_ship_days DESC;
+
+
 -- TOP-SELLING CATEGORY BY STATE
 WITH TOP_CATEGORY AS (
     SELECT
