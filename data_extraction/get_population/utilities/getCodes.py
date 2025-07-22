@@ -1,5 +1,5 @@
 import requests
-
+from data_saving.dataSaver import DataSaver
 
 class FipsLookup:
     def __init__(self, year="2010", dataset="dec/sf1"):
@@ -30,37 +30,36 @@ class FipsLookup:
 
                 self.lookup[(city_name, state_name)] = (state_fips, place_fips)
 
+                
     def get_fips_codes(self, city_state_list):
         if self.lookup is None:
             self.load_data()
 
         results = {}
+        rows = []
+
         for city, state in city_state_list:
             key = (city.lower(), state.lower())
             fips = self.lookup.get(key)
+
             if fips:
                 results[(city, state)] = {
                     "state_fips": fips[0],
                     "place_fips": fips[1]
                 }
+
+                # Add to list for saving
+                rows.append({
+                    "city": city,
+                    "state": state,
+                    "state_fips": fips[0],
+                    "place_fips": fips[1]
+                })
             else:
                 results[(city, state)] = None  # Not found
 
+        # Save to CSV
+        ds = DataSaver()
+        ds.save_list_of_dicts_to_csv(data=rows, output_dir="state_codes", file_name="fips_codes.csv")
+
         return results
-
-
-# Usage example
-lookup = FipsLookup()
-city_state_pairs = [
-    ("Los Angeles", "California"),
-    ("Houston", "Texas"),
-    ("Nonexistent City", "Nowhere")
-]
-
-results = lookup.get_fips_codes(city_state_pairs)
-
-for (city, state), fips in results.items():
-    if fips:
-        print(f"{city}, {state} -> state FIPS: {fips['state_fips']}, place FIPS: {fips['place_fips']}")
-    else:
-        print(f"{city}, {state} -> NOT FOUND")

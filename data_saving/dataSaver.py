@@ -32,7 +32,7 @@ class DataSaver:
     method to save into csv files
     """
 
-    def save_list_of_dicts_to_csv(data, output_dir="output", file_name="data.csv"):
+    def save_list_of_dicts_to_csv(self, data, file_name=None, output_dir=None):
         """
         Save a list of dictionaries to a CSV file.
 

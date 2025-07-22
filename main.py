@@ -3,6 +3,7 @@ from data_saving.dataSaver import DataSaver
 from database_utils.databaseUtils import Database
 from analysis.descriptive_analysis.association_analysis.associationAnalysis import MarketBasketAnalysis
 from analysis.descriptive_analysis.clustering_analysis.kMeansClustering import KMeans
+from data_extraction.get_population.utilities.getCodes import FipsLookup
 
 
 class Pipeline:
@@ -61,6 +62,22 @@ class ClusteringAnalysis:
         self.cls_obj.fit_transform()
 
 
+
+
+class GetFips:
+    def __init__(self):
+        self.cls_obj = FipsLookup()
+
+    def get(self):
+        self.cls_obj.get_fips_codes(
+            city_state_list=[
+                ("Los Angeles", "California"),
+                ("Houston", "Texas"),
+                ("Nonexistent City", "Nowhere")
+            ]
+        )
+
+
 if __name__ == "__main__":
 
     """
@@ -76,8 +93,12 @@ if __name__ == "__main__":
     Market Basket Analysis
     mba = AssociationAnalysis()
     mba.perform_mba()
-    """
-    
+
     cls = ClusteringAnalysis()
     cls.perform_kmean()
     
+    """
+    
+
+    gf = GetFips()
+    gf.get()
