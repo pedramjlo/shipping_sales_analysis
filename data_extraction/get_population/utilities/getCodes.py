@@ -1,5 +1,6 @@
 import requests
 
+
 class FipsLookup:
     def __init__(self, year="2010", dataset="dec/sf1"):
         self.base_url = f"https://api.census.gov/data/{year}/{dataset}"
