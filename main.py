@@ -1,3 +1,4 @@
+import pandas as pd
 from data_wrangling.data_cleaning.dataCleaner import DataCleaner
 from data_saving.dataSaver import DataSaver
 from database_utils.databaseUtils import Database
@@ -65,17 +66,29 @@ class ClusteringAnalysis:
 
 
 class GetFips:
-    def __init__(self):
+    def __init__(self, df="./dataset/cleaned_data/cleaned_sales_data.csv"):
         self.cls_obj = FipsLookup()
+        self.df = pd.read_csv(df)
+
+
+    def get_states_cities(self):
+        """
+        getting the states and cities from the cleaned dataset
+        """
+        city_state_pairs = self.df[['city', 'state']].drop_duplicates()
+        
+        return list(city_state_pairs.itertuples(index=False, name=None))
+         
+        
+
 
     def get(self):
-        self.cls_obj.get_fips_codes(
-            city_state_list=[
-                ("Los Angeles", "California"),
-                ("Houston", "Texas"),
-                ("Nonexistent City", "Nowhere")
-            ]
-        )
+        self.cls_obj.get_fips_codes(city_state_list=self.get_states_cities())
+
+
+    def run(self):
+        self.get_states_cities()
+        self.get()
 
 
 if __name__ == "__main__":
@@ -101,4 +114,4 @@ if __name__ == "__main__":
     
 
     gf = GetFips()
-    gf.get()
+    gf.run()

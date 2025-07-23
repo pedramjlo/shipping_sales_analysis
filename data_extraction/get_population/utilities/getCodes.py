@@ -1,6 +1,15 @@
 import requests
 from data_saving.dataSaver import DataSaver
 
+
+
+"""
+Since the U.S. Census Bureau API required the FIPS code of states and cities
+to fetch relevant data;
+    - the FIPS codes of states are retrieved 
+    - Saved in a new directory and CSV file 
+"""
+
 class FipsLookup:
     def __init__(self, year="2010", dataset="dec/sf1"):
         self.base_url = f"https://api.census.gov/data/{year}/{dataset}"

@@ -12,7 +12,6 @@ logging.basicConfig(
 class DataSaver:
 
 
-
     def save_cleaned_data(self, df, output_dir="dataset/cleaned_data", filename="cleaned_sales_data.csv"):
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
